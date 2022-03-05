@@ -20,6 +20,7 @@ public class LaneManagementRepoService implements LaneManagementRepoInterface{
 		this.cards = new HashMap<String, KanbanCard>();
 	}
 	
+	@Override
 	public boolean addLane(String laneName) throws NullPointerException {
 		Objects.requireNonNull(laneName, "LaneMgtRepoSrvc.addLane(): lane name cannot be null");
 		KanbanLane newLane = new KanbanLane(laneName);
@@ -29,6 +30,7 @@ public class LaneManagementRepoService implements LaneManagementRepoInterface{
 		else return false;
 	}
 	
+	@Override
 	public boolean removeLane(String laneName) throws NullPointerException {
 		Objects.requireNonNull(laneName, "LaneMgtRepoSrvc.removeLane(): lane name cannot be null");
 		KanbanLane result = this.lanes.remove(laneName);
@@ -37,6 +39,7 @@ public class LaneManagementRepoService implements LaneManagementRepoInterface{
 		else return true;
 	}
 	
+	@Override
 	public boolean addCardToLane(String cardName, String cardDeadline, String cardText, String laneName) throws NullPointerException {
 		Objects.requireNonNull(cardName);
 		Objects.requireNonNull(laneName);
@@ -58,14 +61,17 @@ public class LaneManagementRepoService implements LaneManagementRepoInterface{
 		return false;
 	}
 	
+	@Override
 	public KanbanLane getKanbanLane(String laneName) {
 		return this.lanes.get(laneName);
 	}
 	
+	@Override
 	public KanbanCard getKanbanCard(String cardName) {
 		return this.cards.get(cardName);
 	}
 	
+	@Override
 	public List<KanbanLane> getListOfLanes(){
 		return new ArrayList<KanbanLane>(this.lanes.values());
 	}

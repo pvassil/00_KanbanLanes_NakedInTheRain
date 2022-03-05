@@ -21,6 +21,7 @@ public class LaneReporterText implements LaneReporterInterface{
 		this.repo = Objects.requireNonNull(repo);
 	}
 	
+	@Override
 	public String reportLaneLong(String laneName) {
 		String result = "";
 		KanbanLane lane = this.repo.getKanbanLane(laneName);
