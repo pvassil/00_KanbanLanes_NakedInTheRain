@@ -1,0 +1,75 @@
+package service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import model.KanbanCard;
+import model.KanbanLane;
+
+public class LaneManagementRepoService implements LaneManagementRepoInterface{
+
+	private final Map<String, KanbanLane> lanes;
+	private final Map<String, KanbanCard> cards;
+	
+	public LaneManagementRepoService() {
+		super();
+		this.lanes= new HashMap<String, KanbanLane>();
+		this.cards = new HashMap<String, KanbanCard>();
+	}
+	
+	public boolean addLane(String laneName) throws NullPointerException {
+		Objects.requireNonNull(laneName, "LaneMgtRepoSrvc.addLane(): lane name cannot be null");
+		KanbanLane newLane = new KanbanLane(laneName);
+		KanbanLane result = this.lanes.putIfAbsent(laneName, newLane);
+		if (result == null)
+			return true;
+		else return false;
+	}
+	
+	public boolean removeLane(String laneName) throws NullPointerException {
+		Objects.requireNonNull(laneName, "LaneMgtRepoSrvc.removeLane(): lane name cannot be null");
+		KanbanLane result = this.lanes.remove(laneName);
+		if (result == null)
+			return false;
+		else return true;
+	}
+	
+	public boolean addCardToLane(String cardName, String cardDeadline, String cardText, String laneName) throws NullPointerException {
+		Objects.requireNonNull(cardName);
+		Objects.requireNonNull(laneName);
+		
+		KanbanLane lane = null;
+		if(this.lanes.containsKey(laneName))
+			 lane = this.lanes.get(laneName);
+		else
+			return false;
+		
+		try {
+			KanbanCard card = new KanbanCard(cardName, cardDeadline, cardText, lane); 
+			this.cards.put(cardName, card);
+			if (lane.addCard(card))
+				return true;
+		}catch(NullPointerException e) {
+			return false;
+		}
+		return false;
+	}
+	
+	public KanbanLane getKanbanLane(String laneName) {
+		return this.lanes.get(laneName);
+	}
+	
+	public KanbanCard getKanbanCard(String cardName) {
+		return this.cards.get(cardName);
+	}
+	
+	public List<KanbanLane> getListOfLanes(){
+		return new ArrayList<KanbanLane>(this.lanes.values());
+	}
+	
+	//TODO: remove card completely, move card to another lane
+	
+}//end class
